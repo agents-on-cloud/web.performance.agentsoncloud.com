@@ -1,83 +1,87 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
-      </v-card>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+  <section class="">
+    <header
+      class="flex justify-between items-center border-b-2 px-10 h-20 my-auto"
+    >
+      <h1>The Overview Page</h1>
+      <div class="cursor-pointer">Settings</div>
+    </header>
+    <!-- TODO: The facilities should be included, but everything is averaged per faiclity and is chosen first  -->
+    <main id="overview-container" class="my-15 relative">
+      <FiltersDaysBefore />
+      <OverviewFacilities
+        @openDialog="openDialogHandler('facilities')"
+        :facilityReviews="getGroupedWorstReviews.facilities"
+      />
+      <div class="flex gap-5">
+        <OverviewProviders
+          class="w-1/2"
+          @openDialog="openDialogHandler('providers')"
+          :providerReviews="getGroupedWorstReviews.providers"
+        />
+        <OverviewConsumers
+          class="w-1/2"
+          @openDialog="openDialogHandler('consumers')"
+          :consumerReviews="getGroupedWorstReviews.consumers"
+        />
+      </div>
+      <div class="flex gap-5">
+        <OverviewServices
+          class="w-1/2"
+          @openDialog="openDialogHandler('services')"
+          :serviceReviews="getGroupedWorstReviews.services"
+        />
+        <OverviewSuppliers
+          class="w-1/2"
+          @openDialog="openDialogHandler('suppliers')"
+          :supplierReviews="getGroupedWorstReviews.suppliers"
+        />
+      </div>
+      <OverviewReviews
+        @openDialog="openDialogHandler('reviews')"
+        :reviews="getWorstReviews"
+      />
+      <v-dialog v-model="dialog">
+        <ListEntities :type="type" />
+      </v-dialog>
+    </main>
+  </section>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
-  name: 'IndexPage'
-}
+  data() {
+    return {
+      dialog: false,
+      type: null,
+    };
+  },
+  methods: {
+    openDialogHandler(type) {
+      this.type = type;
+      this.dialog = true;
+      console.log("emitting ", type, this.type);
+    },
+  },
+  computed: {
+    ...mapGetters(["getGroupedWorstReviews", "getWorstReviews"]),
+    ReviewCards() {},
+  },
+  mounted() {
+    this.$store.dispatch("getAllReviews");
+    this.$store.dispatch("getGroupedWorstReviews");
+    this.$store.dispatch("getGroupedReviews");
+    this.$store.dispatch("getWorstReviews");
+  },
+};
 </script>
+
+<style>
+#overview-container > * {
+  max-height: 455px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+</style>
