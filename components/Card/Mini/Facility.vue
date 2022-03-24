@@ -10,7 +10,7 @@
         </v-icon>
         {{ facility.reviewedName.replace(/ (room|machine)/g, "") }}
       </h4>
-      <MetricsScore :value="facility.avg_score" />
+      <MetricsScore :value="facility.score" />
     </div>
   </v-card>
 </template>

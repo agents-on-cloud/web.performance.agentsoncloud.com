@@ -2,13 +2,13 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
-  ssr: false,
+  ssr: true,
 
   server: {
     port: 3001,
   },
   // Target: https://go.nuxtjs.dev/config-target
-  target: 'static',
+  target: 'server',
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -54,9 +54,30 @@ export default {
   ],
 
   axios: {
-    // Workaround to avoid enforcing hard-coded urls: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: 'http://localhost:3000/api/v1',
+    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
+    baseURL: "http://localhost:3000/api/v1",
+    proxy: true,
   },
+
+  publicRuntimeConfig: {
+    axios: {
+      browserBaseURL: process.env.BROWSER_BASE_URL
+    }
+  },
+
+  privateRuntimeConfig: {
+    axios: {
+      baseURL: process.env.BASE_URL
+    }
+  },
+
+  proxy: {
+    "/backend/": {
+      target: "http://localhost:3000/api/v1/",
+      pathRewrite: { "^/backend/": "" },
+    },
+  },
+
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {

@@ -20,7 +20,7 @@
         <div class="text-center self-start w-32 flex-grow">
           <v-icon small>mdi-calendar-month</v-icon>
           <span class="font-light text-gray-400 text-xs">{{
-            review.createdAt.substr(0,10)
+            review.createdAt ? review.createdAt.substr(0, 10) : ""
           }}</span>
         </div>
       </header>

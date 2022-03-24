@@ -7,10 +7,10 @@
       </v-btn>
     </v-card-title>
 
-    <v-container class="flex p-10 gap-5 justify-between">
+    <Container>
       <section class="w-full">
         <!-- list of providers -->
-        <!-- TODO: add search tools -->
+        <!-- TODO: add more search tools -->
         <v-data-table
           :headers="headers"
           :items="providers"
@@ -18,32 +18,16 @@
           class="elevation-1"
           hide-default-footer
         >
-          <template #[`item.behavioral`]="{ item }">
-            <v-rating
-              title="Durability"
-              empty-icon="mdi-star-outline"
-              full-icon="mdi-star"
-              half-icon="mdi-star-half-full"
-              hover
-              length="5"
-              :value="item.behavioral / 20"
-              half-increments
-              readonly
-              class="text-center"
-            ></v-rating>
+          <template #[`header.stars`]>Behavioral (%)</template>
+          <template #[`item.score`]="{ item }">
+            <MetricsStars :value="item.score" />
           </template>
-          <template #[`item.services`]="{ item }">
-            {{
-              (item.services && parseInt(item.services / 60 / 24) + " hours") ||
-              "Inapplicable"
-            }}
-          </template>
-          <template #[`item.sales`]="{ item }">
-            {{ (item.sales && parseInt(item.sales) + " $") || "Inapplicable" }}
+          <template #[`item.stars`]="{ item }">
+            <MetricsStars :value="item.stars" />
           </template>
         </v-data-table>
       </section>
-    </v-container>
+    </Container>
   </v-card>
 </template>
 
@@ -54,44 +38,24 @@ export default {
   props: ["providerReviews"],
   data() {
     return {
-      headers: [
-        {
-          text: "Full Name",
-          align: "start",
-          sortable: false,
-          value: "name",
-        },
-        { text: "Roles", sortable: false, align: "center", value: "roles" },
-        { text: "Score (%)", sortable: false, align: "center", value: "score" },
-        {
-          text: "Behavioral Score (%)",
-          sortable: false,
-          align: "center",
-          value: "behavioral",
-        },
-        {
-          text: "Services (hours)",
-          sortable: false,
-          align: "center",
-          value: "services",
-        },
-        {
-          text: "Sales Contribution ($)",
-          sortable: false,
-          align: "center",
-          value: "sales",
-        },
-      ],
+      headers: [],
       providers: [],
     };
   },
+  methods: {
+    updateTable() {
+      ({ headers: this.headers, items: this.providers } = parseProvidersTable(
+        this.providerReviews
+      ));
+    },
+  },
   watch: {
     providerReviews() {
-      this.providers = parseProvidersTable(this.providerReviews);
+      this.updateTable();
     },
   },
   mounted() {
-    this.providers = parseProvidersTable(this.providerReviews);
+    this.updateTable();
   },
 };
 </script>

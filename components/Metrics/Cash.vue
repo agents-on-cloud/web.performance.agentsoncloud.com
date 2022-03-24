@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center self-start">
+  <div v-if="!mini" class="text-center self-start">
     <h5 class="mb-4"><v-icon class="mx-2">mdi-cash</v-icon>Profits</h5>
     <div class="text-xs flex justify-around gap-2">
       <div>
@@ -14,11 +14,33 @@
       </div>
     </div>
   </div>
+  <div v-else class="text-center">
+    {{ value > 0 ? parsedAmount + " $" : "-" }}
+  </div>
 </template>
 
 <script>
 export default {
-  props: ["value"],
+  props: ["value", "mini"],
+  data() {
+    return {
+      parsedAmount: 0,
+    };
+  },
+  watch: {
+    value() {
+      this.parseAmount();
+    },
+  },
+  methods: {
+    parseAmount() {
+      this.parsedAmount =
+        this.value > 1000 ? parseInt(this.value / 1000) + "K" : this.value;
+    },
+  },
+  mounted() {
+    this.parseAmount();
+  },
 };
 </script>
 

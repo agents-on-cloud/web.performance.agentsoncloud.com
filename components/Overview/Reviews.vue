@@ -7,22 +7,16 @@
       </v-btn>
     </v-card-title>
 
-    <v-container class="flex p-10 gap-5 justify-between">
-      <section class="w-full">
-        <!-- list of providers -->
-        <!-- TODO: add search tools -->
-        <!-- list of critical reviews -->
-        <h3 class="text-center mb-5"></h3>
-        <v-container id="container">
-          <CardMiniReview
-            class="w-80"
-            v-for="review of reviews"
-            :key="review.id"
-            :review="review"
-          />
-        </v-container>
-      </section>
-    </v-container>
+    <Container>
+      <!-- TODO: add search tools -->
+      <!-- list of critical reviews -->
+      <CardMiniReview
+        class="w-80"
+        v-for="review of reviews"
+        :key="review.id"
+        :review="review"
+      />
+    </Container>
   </v-card>
 </template>
 

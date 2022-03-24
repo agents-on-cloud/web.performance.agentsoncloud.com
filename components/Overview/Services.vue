@@ -6,14 +6,14 @@
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
     </v-card-title>
-    <v-container id="container" class="gap-5 justify-center">
+    <Container>
       <!-- list of services -->
       <CardMiniService
         v-for="service of serviceReviews"
         :key="service.id"
         :service="service"
       />
-    </v-container>
+    </Container>
   </v-card>
 </template>
 
@@ -27,11 +27,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-#container {
-  display: flex;
-  grid-gap: 10px;
-  flex-wrap: wrap;
-}
-</style>

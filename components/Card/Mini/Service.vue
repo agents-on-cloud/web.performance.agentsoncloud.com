@@ -5,7 +5,7 @@
         <!-- TODO: Embedd the type into service type maybe? -->
         {{ service.reviewedName }}
       </h4>
-      <MetricsScore :value="service.avg_score" />
+      <MetricsScore :value="service.score" />
     </div>
   </v-card>
 </template>

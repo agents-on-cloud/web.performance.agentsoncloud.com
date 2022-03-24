@@ -5,7 +5,7 @@
         <!-- TODO: Embedd the type into facility type maybe? -->
         {{ supplier.reviewedName }}
       </h4>
-      <MetricsScore :value="supplier.avg_score" />
+      <MetricsScore :value="supplier.score" />
     </div>
   </v-card>
 </template>

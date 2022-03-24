@@ -7,7 +7,7 @@
       </v-btn>
     </v-card-title>
 
-    <v-container class="flex p-10 gap-5 justify-between">
+    <Container>
       <section class="w-full">
         <!-- list of providers -->
         <v-data-table
@@ -17,29 +17,16 @@
           class="elevation-1"
           hide-default-footer
         >
-          <template #[`item.behavioral`]="{ item }">
-            <v-rating
-              title="Durability"
-              empty-icon="mdi-star-outline"
-              full-icon="mdi-star"
-              half-icon="mdi-star-half-full"
-              hover
-              length="5"
-              :value="item.behavioral / 20"
-              half-increments
-              readonly
-              class="text-center"
-            ></v-rating>
+          <template #[`header.stars`]>Behavioral (%)</template>
+          <template #[`item.score`]="{ item }">
+            <MetricsStars :value="item.score" />
           </template>
-          <template #[`item.payments`]="{ item }">
-            {{
-              (item.payments && parseInt(item.payments) + " $") ||
-              "Inapplicable"
-            }}
+          <template #[`item.stars`]="{ item }">
+            <MetricsStars :value="item.stars" />
           </template>
         </v-data-table>
       </section>
-    </v-container>
+    </Container>
   </v-card>
 </template>
 
@@ -49,43 +36,24 @@ export default {
   props: ["consumerReviews"],
   data() {
     return {
-      headers: [
-        {
-          text: "Full Name",
-          align: "start",
-          sortable: false,
-          value: "name",
-        },
-        { text: "Score", align: "center", sortable: false, value: "score" },
-        {
-          text: "Behavioral Score",
-          align: "center",
-          sortable: false,
-          value: "behavioral",
-        },
-        {
-          text: "Payments Contribution",
-          align: "center",
-          sortable: false,
-          value: "payments",
-        },
-        {
-          text: "Recent Used Services",
-          align: "center",
-          sortable: false,
-          value: "services",
-        },
-      ],
+      headers: [],
       consumers: [],
     };
   },
+  methods: {
+    updateTable() {
+      ({ headers: this.headers, items: this.consumers } = parseConsumersTable(
+        this.consumerReviews
+      ));
+    },
+  },
   watch: {
     consumerReviews() {
-      this.consumers = parseConsumersTable(this.consumerReviews);
+      this.updateTable();
     },
   },
   mounted() {
-    this.consumers = parseConsumersTable(this.consumerReviews);
+    this.updateTable();
   },
 };
 </script>

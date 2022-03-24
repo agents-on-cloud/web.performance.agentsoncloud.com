@@ -7,41 +7,41 @@
       <div class="cursor-pointer">Settings</div>
     </header>
     <!-- TODO: The facilities should be included, but everything is averaged per faiclity and is chosen first  -->
-    <main id="overview-container" class="my-15 relative">
-      <FiltersDaysBefore />
+    <FiltersDaysBefore />
+    <main id="overview-container" class="mb-15 relative">
       <OverviewFacilities
         @openDialog="openDialogHandler('facilities')"
-        :facilityReviews="getGroupedWorstReviews.facilities"
+        :facilityReviews="getOverviewReviews('facilities')"
       />
       <div class="flex gap-5">
         <OverviewProviders
           class="w-1/2"
           @openDialog="openDialogHandler('providers')"
-          :providerReviews="getGroupedWorstReviews.providers"
+          :providerReviews="getOverviewReviews('providers')"
         />
         <OverviewConsumers
           class="w-1/2"
           @openDialog="openDialogHandler('consumers')"
-          :consumerReviews="getGroupedWorstReviews.consumers"
+          :consumerReviews="getOverviewReviews('consumers')"
         />
       </div>
       <div class="flex gap-5">
         <OverviewServices
           class="w-1/2"
           @openDialog="openDialogHandler('services')"
-          :serviceReviews="getGroupedWorstReviews.services"
+          :serviceReviews="getOverviewReviews('services')"
         />
         <OverviewSuppliers
           class="w-1/2"
           @openDialog="openDialogHandler('suppliers')"
-          :supplierReviews="getGroupedWorstReviews.suppliers"
+          :supplierReviews="getOverviewReviews('suppliers')"
         />
       </div>
       <OverviewReviews
         @openDialog="openDialogHandler('reviews')"
-        :reviews="getWorstReviews"
+        :reviews="getOverviewReviews('reviews')"
       />
-      <v-dialog v-model="dialog">
+      <v-dialog :overlay-opacity="0.95" v-model="dialog" class="max-w-7xl">
         <ListEntities :type="type" />
       </v-dialog>
     </main>
@@ -62,18 +62,14 @@ export default {
     openDialogHandler(type) {
       this.type = type;
       this.dialog = true;
-      console.log("emitting ", type, this.type);
     },
   },
   computed: {
-    ...mapGetters(["getGroupedWorstReviews", "getWorstReviews"]),
-    ReviewCards() {},
+    ...mapGetters(["getOverviewReviews"]),
   },
   mounted() {
+    this.$store.dispatch("getOverviewReviews");
     this.$store.dispatch("getAllReviews");
-    this.$store.dispatch("getGroupedWorstReviews");
-    this.$store.dispatch("getGroupedReviews");
-    this.$store.dispatch("getWorstReviews");
   },
 };
 </script>
@@ -83,5 +79,9 @@ export default {
   max-height: 455px;
   overflow-y: auto;
   margin-bottom: 20px;
+}
+
+.v-dialog {
+  max-width: 1280px;
 }
 </style>

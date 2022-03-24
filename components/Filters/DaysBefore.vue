@@ -5,7 +5,7 @@
     tile
     color="white accent-5"
     group
-    class="select-day"
+    class="justify-end w-full my-3 pr-6"
   >
     <v-btn value="">All</v-btn>
     <v-btn :value="365">1 Year</v-btn>
@@ -29,18 +29,8 @@ export default {
 
   watch: {
     daysBefore(before, after) {
-      this.$store.dispatch("getGroupedWorstReviews");
-      this.$store.dispatch("getWorstReviews");
+      this.$store.dispatch("getOverviewReviews");
     },
   },
 };
 </script>
-
-<style>
-.select-day {
-  position: absolute;
-  top: -55px;
-  right: 50px;
-  z-index: 1;
-}
-</style>

@@ -7,14 +7,14 @@
       </v-btn>
     </v-card-title>
     <!-- TODO: Facilities should be displayed as nested, with multiple facilities  -->
-    <v-container id="container" class="gap-5 justify-center">
+    <Container>
       <!-- list of facilities -->
       <CardMiniFacility
         v-for="facility of facilityReviews"
         :facility="facility"
         :key="facility.id"
       />
-    </v-container>
+    </Container>
   </v-card>
 </template>
 
@@ -23,11 +23,3 @@ export default {
   props: ["facilityReviews", "worstReviews"],
 };
 </script>
-
-<style scoped>
-#container {
-  display: flex;
-  grid-gap: 10px;
-  flex-wrap: wrap;
-}
-</style>

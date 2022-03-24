@@ -6,21 +6,20 @@
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
     </v-card-title>
-    <v-container id="container" class="gap-5 justify-center">
+    <Container>
       <!-- list of suppliers -->
-      <CardMiniSupplier v-for="supplier of supplierReviews" :key="supplier.id" :supplier="supplier" />
-    </v-container>
+      <CardMiniSupplier
+        v-for="supplier of supplierReviews"
+        :key="supplier.id"
+        :supplier="supplier"
+      />
+    </Container>
   </v-card>
 </template>
 
 <script>
 export default {
   props: ["supplierReviews"],
-  data() {
-    return {
-      providers: [],
-    };
-  },
 };
 </script>
 

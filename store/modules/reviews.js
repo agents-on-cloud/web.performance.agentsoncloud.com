@@ -1,48 +1,79 @@
+import { queryBuilder } from "../../utils";
+
 export const reviews = {
     namespace: true,
     state: {
-        allReviews: [],
-        allReviewsLength: 0,
-        groupedWorstReviews: { facilities: [], providers: [], services: [], suppliers: [], consumers: [] },
-        groupedReviews: { facilities: [], providers: [], services: [], suppliers: [], consumers: [] },
-        worstReviews: [],
+        overviewReviews: {
+            facilities: [],
+            providers: [],
+            services: [],
+            suppliers: [],
+            consumers: [],
+            reviews: []
+        },
+        allReviews: {
+            facilities: { rows: [], count: 0 },
+            providers: { rows: [], count: 0 },
+            services: { rows: [], count: 0 },
+            suppliers: { rows: [], count: 0 },
+            consumers: { rows: [], count: 0 },
+            reviews: { rows: [], count: 0 }
+        },
         selectedReview: {},
         daysBefore: 999999
     },
 
     mutations: {
-        setAllReviews: (state, payload) => state.allReviews = payload,
-        setAllReviewsCount: (state, payload) => state.allReviewsLength = payload,
-        setGroupedWorstReviews: (state, payload) => state.groupedWorstReviews = payload,
-        setGroupedReviews: (state, payload) => state.groupedReviews = payload,
-        setWorstReviews: (state, payload) => state.worstReviews = payload,
+        setOverviewReviews: (state, payload) => state.overviewReviews = payload,
+        setAllReviews: (state, payload) => state.allReviews = { ...state.allReviews, ...payload },
         setSelectedReview: (state, payload) => state.selectedReview = payload,
         setDaysBefore: (state, payload) => state.daysBefore = payload,
     },
 
     actions: {
-        async getAllReviews({ commit, state }, payload = { limit: 0, offset: 0 }) {
-            const data = await this.$axios.$get(`/reviews?limit=${payload.limit}&offset=${payload.offset}&daysBefore=${state.daysBefore}`);
-            if (!data.count) return commit('setAllReviews', data);
-            commit('setAllReviews', data.rows);
-            return commit('setAllReviewsCount', data.count);
+        // TODO: FIX THIS INTO QUERY BUILDER
+        async getOverviewReviews({ commit, state }, payload = { limit: 5 }) {
+            payload.daysBefore = state.daysBefore;
+
+            const promiseArray = ["facilities", "providers", "services", "suppliers", "consumers"]
+                .map(entity => this.$axios.$get(`/backend/reviews/average/${entity}?limit=5&daysBefore=${state.daysBefore}`));
+            promiseArray.push(this.$axios.$get(`/backend/reviews?limit=5&daysBefore=${state.daysBefore}`));
+
+            const response = await Promise.all(promiseArray);
+            return commit('setOverviewReviews',
+                {
+                    facilities: response[0].rows,
+                    providers: response[1].rows,
+                    services: response[2].rows,
+                    suppliers: response[3].rows,
+                    consumers: response[4].rows,
+                    reviews: response[5].rows
+                });
         },
-        async getGroupedWorstReviews({ commit, state }) {
-            const entities = ["facilities", "providers", "services", "suppliers", "consumers"];
-            const [facilities, providers, services, suppliers, consumers] =
-                await Promise.all(entities.map(entity => this.$axios.$get(`/reviews/average/${entity}?limit=5&daysBefore=${state.daysBefore}`)));
-            commit('setGroupedWorstReviews', { facilities, providers, services, suppliers, consumers });
+        async getAllReviews({ commit, state }, payload = { limit: 10, offset: null, orderBy: null, orderDesc: null }) {
+            payload.daysBefore = state.daysBefore;
+            const promiseArray = ["facilities", "providers", "services", "suppliers", "consumers"]
+                .map(entity => this.$axios.$get(`/backend/reviews/average/${entity}?${queryBuilder(payload)}`));
+            promiseArray.push(this.$axios.$get(`/backend/reviews?${queryBuilder(payload)}`));
+
+            const response = await Promise.all(promiseArray);
+            return commit('setAllReviews',
+                {
+                    facilities: { rows: response[0].rows, count: response[0].count.length },
+                    providers: { rows: response[1].rows, count: response[1].count.length },
+                    services: { rows: response[2].rows, count: response[2].count.length },
+                    suppliers: { rows: response[3].rows, count: response[3].count.length },
+                    consumers: { rows: response[4].rows, count: response[4].count.length },
+                    reviews: { rows: response[5].rows, count: response[5].count }
+                });
         },
-        async getGroupedReviews({ commit, state }) {
-            const entities = ["facilities", "providers", "services", "suppliers", "consumers"];
-            const [facilities, providers, services, suppliers, consumers] =
-                await Promise.all(entities.map(entity => this.$axios.$get(`/reviews/average/${entity}?daysBefore=${state.daysBefore}`)));
-            commit('setGroupedReviews', { facilities, providers, services, suppliers, consumers });
-        },
-        async getWorstReviews({ commit, state }, payload) {
-            const data = await this.$axios.$get(`/reviews?limit=5&daysBefore=${state.daysBefore}`);
-            if (!data.count) return commit('setWorstReviews', data);
-            commit('setWorstReviews', data.rows);
+        async sortReviews({ commit, state }, payload = { type: "reviews", limit: 10, offset: null, orderBy: null, orderDesc: null }) {
+            payload.daysBefore = state.daysBefore;
+            let response;
+
+            if (payload.type !== "reviews") response = await this.$axios.$get(`/backend/reviews/average/${payload.type}?${queryBuilder(payload)}`)
+            if (payload.type === "reviews") response = await this.$axios.$get(`/backend/reviews?${queryBuilder(payload)}`);
+            return commit('setAllReviews', { [payload.type]: { rows: response.rows, count: response.count.length || response.count } });
         },
         setSelectedReview({ commit }, payload) {
             commit('setSelectedReview', payload);
@@ -53,25 +84,16 @@ export const reviews = {
     },
 
     getters: {
-        getAllReviews(state) {
-            return state.allReviews
+        getOverviewReviews: (state) => (type) => {
+            return state.overviewReviews[type] || []
         },
-        getAllReviewsLength(state) {
-            return state.allReviewsLength
+        getAllReviews: (state) => (type) => {
+            return state.allReviews[type] || []
         },
-        getGroupedWorstReviews(state) {
-            return state.groupedWorstReviews
-        },
-        getGroupedReviews(state) {
-            return state.groupedReviews
-        },
-        getWorstReviews(state) {
-            return state.worstReviews
-        },
-        getSelectedReview(state) {
+        getSelectedReview: (state) => {
             return state.selectedReview
         },
-        getDaysBefore(state) {
+        getDaysBefore: (state) => {
             return state.daysBefore
         }
     },

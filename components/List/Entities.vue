@@ -6,37 +6,46 @@
     :options.sync="options"
     :server-items-length="itemsCount"
     :loading="loading"
+    multi-sort
   >
     <template #[`header.reviewerName`]="{ header }">
       {{ header.text.toUpperCase() }}
     </template>
-    <template #[`item.behavioral`]="{ item }">
-      <v-rating
-        title="Durability"
-        empty-icon="mdi-star-outline"
-        full-icon="mdi-star"
-        half-icon="mdi-star-half-full"
-        hover
-        length="5"
-        :value="item.behavioral / 20"
-        half-increments
-        readonly
-        class="text-center"
-      ></v-rating>
+    <template #[`header.servicesUtility`]="{ header }">
+      {{ header.text }} <br /><span class="text-gray-400">HH:MM:SS</span>
     </template>
-    <template #[`item.services`]="{ item }">
-      {{
-        (item.services && parseInt(item.services / 60 / 24) + " hours") ||
-        "Inapplicable"
-      }}
+    <template #[`item.score`]="{ item }">
+      <MetricsStars :value="item.score" />
     </template>
-    <template v-if="type !== 'reviews'" #[`item.sales`]="{ item }">
-      {{ (item.sales && parseInt(item.sales) + " $") || "Inapplicable" }}
+    <template #[`item.stars`]="{ item }">
+      <MetricsStars :value="item.stars" />
+    </template>
+    <template #[`item.providerType`]="{ item }">
+      <MetricsRoles :value="item.providerType" />
+    </template>
+    <template #[`item.timeUtility`]="{ item }">
+      <MetricsTime :value="item.timeUtility" />
+    </template>
+    <template #[`item.servicesUtility`]="{ item }">
+      <MetricsTime :value="item.servicesUtility" />
+    </template>
+    <template #[`item.responseTime`]="{ item }">
+      <MetricsTime :value="item.responseTime" />
+    </template>
+    <template #[`item.payments`]="{ item }">
+      <MetricsCash :mini="true" :value="item.payments" />
+    </template>
+    <template #[`item.sales`]="{ item }">
+      <MetricsCash :mini="true" :value="item.sales" />
+    </template>
+    <template #[`item.profit`]="{ item }">
+      <MetricsCash :mini="true" :value="item.profit" />
+    </template>
+    <template #[`item.bookings`]="{ item }">
+      <MetricsNumber :mini="true" :value="item.bookings" />
     </template>
     <template #[`item.createdAt`]="{ item }">
-      <span class="block min-w-max p-3">
-        {{ item.createdAt.substr(0, 10) }}
-      </span>
+      <MetricsCreatedAt :createdAt="item.createdAt" />
     </template>
   </v-data-table>
 </template>
@@ -58,50 +67,37 @@ export default {
   },
   methods: {
     updateTable() {
-      if (this.type !== "reviews") {
-        ({ headers: this.headers, items: this.items } = parseEntitiesTable(
-          this.getGroupedReviews,
-          this.type
-        ));
-      } else {
-        ({ headers: this.headers, items: this.items } = parseReviewsTable(
-          this.getAllReviews
-        ));
-      }
+      ({ headers: this.headers, items: this.items } = (
+        this.type === "reviews" ? parseReviewsTable : parseEntitiesTable
+      )(this.getAllReviews(this.type).rows, this.type));
+    },
+
+    async fetchUpdate(sortBy, sortDesc, page, itemsPerPage) {
+      await this.$store.dispatch("sortReviews", {
+        type: this.type,
+        limit: itemsPerPage,
+        offset: itemsPerPage * (page - 1) || null,
+        orderBy: sortBy,
+        orderDesc: sortDesc,
+      });
     },
   },
   computed: {
-    ...mapGetters([
-      "getAllReviews",
-      "getAllReviewsLength",
-      "getGroupedReviews",
-    ]),
+    ...mapGetters(["getAllReviews"]),
   },
   mounted() {
     this.updateTable();
-    this.itemsCount = this.getAllReviewsLength;
   },
   watch: {
     type(newVal, oldVal) {
       this.updateTable();
     },
-    options: {
-      async handler() {
-        const { sortBy, sortDesc, page, itemsPerPage } = this.options;
-        console.log(sortBy, sortDesc);
-        this.loading = true;
-        await this.$store.dispatch("getAllReviews", {
-          limit: itemsPerPage,
-          offset: itemsPerPage * (page - 1),
-        });
-        this.loading = false;
-      },
-      deep: true,
-    },
-    loading() {
-      console.log(this.getAllReviews);
-      if (!this.loading && this.getAllReviews.length > 0)
-        return this.updateTable();
+    async options() {
+      const { sortBy, sortDesc, page, itemsPerPage } = this.options;
+      this.loading = true;
+      await this.fetchUpdate(sortBy, sortDesc, page, itemsPerPage);
+      this.updateTable();
+      this.loading = false;
     },
   },
 };
@@ -111,5 +107,37 @@ export default {
 th,
 td {
   white-space: nowrap;
+}
+
+.v-data-table {
+  max-width: 1280px;
+}
+</style>
+
+<style>
+th:nth-child(2),
+td:nth-child(2),
+.fixed {
+  padding-right: 20px;
+  width: 150px;
+  position: sticky;
+  left: 0;
+  top: auto;
+  z-index: 1;
+  border-bottom: thin solid rgba(255, 255, 255, 0.12);
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+  background-color: #1e1e1e;
+}
+
+tr:hover td:nth-child(2) {
+  background-color: #616161;
+  border-top: thin solid rgba(255, 255, 255, 0.35)!important;
+}
+
+td {
+  z-index: 0;
 }
 </style>
