@@ -22,8 +22,9 @@ export default {
     };
   },
   methods: {
-    handler() {
+    async handler() {
       this.$store.dispatch("setDaysBefore", this.daysBefore);
+      await this.$store.dispatch("getAllReviews");
     },
   },
 

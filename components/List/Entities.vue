@@ -55,7 +55,7 @@ import { mapGetters } from "vuex";
 import { parseEntitiesTable, parseReviewsTable } from "../../utils";
 
 export default {
-  props: ["type"],
+  props: ["type", "toggleUpdate"],
   data() {
     return {
       headers: [],
@@ -70,6 +70,9 @@ export default {
       ({ headers: this.headers, items: this.items } = (
         this.type === "reviews" ? parseReviewsTable : parseEntitiesTable
       )(this.getAllReviews(this.type).rows, this.type));
+
+      this.itemsCount = this.getAllReviews(this.type).count;
+      typeof this.itemsCount === "object" && (this.itemsCount = 0);
     },
 
     async fetchUpdate(sortBy, sortDesc, page, itemsPerPage) {
@@ -89,7 +92,8 @@ export default {
     this.updateTable();
   },
   watch: {
-    type(newVal, oldVal) {
+    toggleUpdate() {
+      this.options.page = 1;
       this.updateTable();
     },
     async options() {
@@ -134,7 +138,7 @@ td:nth-child(2) {
 
 tr:hover td:nth-child(2) {
   background-color: #616161;
-  border-top: thin solid rgba(255, 255, 255, 0.35)!important;
+  border-top: thin solid rgba(255, 255, 255, 0.35) !important;
 }
 
 td {

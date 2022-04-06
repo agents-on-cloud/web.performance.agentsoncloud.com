@@ -2,12 +2,12 @@ import metrics from "../../metrics.json"
 
 // TODO: refactor metrics to start with that exactly
 // TODO: move out stars so its independant, maybe from metrics
-export const parseEntitiesTable = (entitiesObject, entityType = "facilities") => {
-    let restObj;
+export const parseEntitiesTable = (entitiesObject = {}, entityType = "facilities") => {
+    let restObj = [];
     const entityMetrics = entityType === "providers" ? metrics[entityType]["front-facing"] : metrics[entityType];
     const items = entitiesObject.map(entity => {
         let metricsObject = {};
-        const { stars, rest } = getAverageStars(entity);
+        const { stars, rest = [] } = getAverageStars(entity);
         restObj = rest;
         entityMetrics.forEach(metric => rest[metric.name] && (metricsObject[metric.name] = entity[`${metric.name}`]));
         return {
@@ -30,11 +30,11 @@ export const parseEntitiesTable = (entitiesObject, entityType = "facilities") =>
     }
     headers.push({ text: `Score (%)`, align: "center", sortable: true, value: "score" })
     headers.push({ text: "Average Stars", align: "center", sortable: false, value: "stars" })
-    headers.push(...entityMetrics.filter(metric => restObj[metric.name] || restObj[metric.name] === null).map(metric => metric.name && ({ text: metric.text, align: metric.align, sortable: metric.sortable, value: metric.value })));
+    headers.push(...entityMetrics.filter(metric => restObj[metric.name] || restObj[metric.name] === null)?.map(metric => metric.name && ({ text: metric.text, align: metric.align, sortable: metric.sortable, value: metric.value })));
     return { headers, items };
 }
 
-export const parseReviewsTable = (reviewsArray) => {
+export const parseReviewsTable = (reviewsArray = []) => {
     if (!reviewsArray.length) return {};
     // extract unecessary keys
     let restObj;

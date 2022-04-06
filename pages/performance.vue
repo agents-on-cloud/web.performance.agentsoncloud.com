@@ -42,7 +42,7 @@
         :reviews="getOverviewReviews('reviews')"
       />
       <v-dialog :overlay-opacity="0.95" v-model="dialog" class="max-w-7xl">
-        <ListEntities :type="type" />
+        <ListEntities :toggleUpdate="toggleUpdate" :type="type" />
       </v-dialog>
     </main>
   </section>
@@ -56,12 +56,14 @@ export default {
     return {
       dialog: false,
       type: null,
+      toggleUpdate: false,
     };
   },
   methods: {
     openDialogHandler(type) {
       this.type = type;
       this.dialog = true;
+      this.toggleUpdate = !this.toggleUpdate
     },
   },
   computed: {
