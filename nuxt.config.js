@@ -51,6 +51,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '../storybook-nuxt/module'
   ],
 
   axios: {
@@ -76,6 +77,7 @@ export default {
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
+    treeShake: false,
     theme: {
       dark: true,
       themes: {

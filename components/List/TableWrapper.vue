@@ -33,7 +33,9 @@ export default {
       typeof this.itemsCount === "object" && (this.itemsCount = 0);
     },
 
-    async fetchUpdate({ sortBy, sortDesc, page, itemsPerPage }) {
+    async fetchUpdate(options) {
+      this.options = options;
+      const { sortBy, sortDesc, page, itemsPerPage } = options
       this.loading = true;
       await this.$store.dispatch("sortReviews", {
         type: this.type,
@@ -51,10 +53,6 @@ export default {
   },
   mounted() {
     this.updateTable();
-    console.log({
-      headers: JSON.stringify(this.headers),
-      items: JSON.stringify(this.items),
-    });
   },
   watch: {
     toggleUpdate() {
