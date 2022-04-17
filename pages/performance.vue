@@ -52,6 +52,7 @@
 import { mapGetters } from "vuex";
 
 export default {
+  layout:'dashboard',
   data() {
     return {
       dialog: false,
