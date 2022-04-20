@@ -42,7 +42,7 @@
         :reviews="getOverviewReviews('reviews')"
       />
       <v-dialog :overlay-opacity="0.95" v-model="dialog1" class="max-w-7xl">
-        <ListEntities :type="type" />
+        <ListTableWrapper :type="type" />
       </v-dialog>
       <v-dialog
         :overlay-opacity="0.95"

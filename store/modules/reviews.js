@@ -86,7 +86,7 @@ export const reviews = {
         async getEntityReviews({ commit, state }, payload = {}) {
             payload.daysBefore = state.daysBefore;
             payload.id = state.entityReviews.id;
-            console.log({ payload });
+
             const [{ rows: average }, all] = await Promise.all([
                 this.$axios.$get(`/backend/reviews/average/${state.entityReviews.type}?${queryBuilder(payload)}`),
                 this.$axios.$get(`/backend/reviews/${state.entityReviews.type}?${queryBuilder(payload)}`)

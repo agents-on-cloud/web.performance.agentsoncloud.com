@@ -13,7 +13,7 @@ import { mapGetters } from "vuex";
 import { parseEntitiesTable, parseReviewsTable } from "../../utils";
 
 export default {
-  props: ["type", "toggleUpdate"],
+  props: ["type"],
   data() {
     return {
       headers: [],
@@ -55,8 +55,10 @@ export default {
     this.updateTable();
   },
   watch: {
-    toggleUpdate() {
+    type() {
       this.options.page = 1;
+      this.options.sortBy = [];
+      this.options.sortDesc = ["false"];
       this.updateTable();
     },
   },
