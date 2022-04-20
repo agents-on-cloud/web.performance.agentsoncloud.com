@@ -1,4 +1,4 @@
-import metrics from "../../metrics.json"
+import metrics from "../metrics.json"
 
 // TODO: refactor metrics to start with that exactly
 // TODO: move out stars so its independant, maybe from metrics

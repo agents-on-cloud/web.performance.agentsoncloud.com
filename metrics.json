@@ -1,0 +1,222 @@
+{
+    "facilities": [
+        {
+            "name": "timeUtility",
+            "base": 86400,
+            "text": "Time Utility",
+            "align": "center",
+            "sortable": true,
+            "value": "timeUtility"
+        },
+        {
+            "name": "servicesUtility",
+            "base": 500,
+            "text": "Service Utility",
+            "align": "center",
+            "sortable": true,
+            "value": "servicesUtility"
+        },
+        {
+            "name": "durability",
+            "base": 100,
+            "text": "How Shiny it is?",
+            "align": "center",
+            "sortable": true,
+            "value": "durability"
+        },
+        {
+            "name": "cleanliness",
+            "base": 100,
+            "text": "How Clean it is?",
+            "align": "center",
+            "sortable": true,
+            "value": "cleanliness"
+        }
+    ],
+    "providers": {
+        "operational": [
+            {
+                "name": "responseTime",
+                "base": 900
+            },
+            {
+                "name": "responseQuality",
+                "base": 100
+            }
+        ],
+        "managerial": [
+            {
+                "name": "availability",
+                "base": 100
+            },
+            {
+                "name": "reachability",
+                "base": 100
+            },
+            {
+                "name": "punctuality",
+                "base": 100
+            }
+        ],
+        "front-facing": [
+            {
+                "name": "responseTime",
+                "base": 300,
+                "text": "Response Time",
+                "align": "center",
+                "sortable": true,
+                "value": "responseTime"
+            },
+            {
+                "name": "responseQuality",
+                "base": 100,
+                "text": "Response Quality",
+                "align": "center",
+                "sortable": true,
+                "value": "responseQuality"
+            },
+            {
+                "name": "availability",
+                "base": 100,
+                "text": "Got a minute?",
+                "align": "center",
+                "sortable": true,
+                "value": "availability"
+            },
+            {
+                "name": "reachability",
+                "base": 100,
+                "text": "Where are you?",
+                "align": "center",
+                "sortable": true,
+                "value": "reachability"
+            },
+            {
+                "name": "punctuality",
+                "base": 100,
+                "text": "Why are you late!",
+                "align": "center",
+                "sortable": true,
+                "value": "punctuality"
+            },
+            {
+                "name": "servicesUtility",
+                "base": 28800,
+                "text": "How busy really?",
+                "align": "center",
+                "sortable": true,
+                "value": "servicesUtility"
+            },
+            {
+                "name": "cleanliness",
+                "base": 100,
+                "text": "How Clean it is?",
+                "align": "center",
+                "sortable": true,
+                "value": "cleanliness"
+            },
+            {
+                "name": "sales",
+                "base": 52000,
+                "text": "Cashed In",
+                "align": "center",
+                "sortable": true,
+                "value": "sales"
+            }
+        ]
+    },
+    "services": [
+        {
+            "name": "timeUtility",
+            "base": 86400,
+            "text": "Time Utility",
+            "align": "center",
+            "sortable": true,
+            "value": "timeUtility"
+        },
+        {
+            "name": "profit",
+            "base": 352000,
+            "text": "Cash Flow",
+            "align": "center",
+            "sortable": true,
+            "value": "profit"
+        },
+        {
+            "name": "returningCustomers",
+            "base": 100,
+            "text": "Second Serving?",
+            "align": "center",
+            "sortable": true,
+            "value": "returningCustomers"
+        },
+        {
+            "name": "bookings",
+            "base": 1000,
+            "text": "Booked Out",
+            "align": "center",
+            "sortable": true,
+            "value": "bookings"
+        }
+    ],
+    "suppliers": [
+        {
+            "name": "responseTime",
+            "base": 14400,
+            "text": "Was it quick?",
+            "align": "center",
+            "sortable": true,
+            "value": "responseTime"
+        },
+        {
+            "name": "responseQuality",
+            "base": 100,
+            "text": "Was it convenient?",
+            "align": "center",
+            "sortable": true,
+            "value": "responseQuality"
+        }
+    ],
+    "consumers": [
+        {
+            "name": "punctuality",
+            "base": 100,
+            "text": "On time?",
+            "align": "center",
+            "sortable": true,
+            "value": "punctuality"
+        },
+        {
+            "name": "cleanliness",
+            "base": 100,
+            "text": "Did they smell?",
+            "align": "center",
+            "sortable": true,
+            "value": "cleanliness"
+        },
+        {
+            "name": "manner",
+            "base": 100,
+            "text": "Bad attitudes?",
+            "align": "center",
+            "sortable": true,
+            "value": "manner"
+        },
+        {
+            "name": "communication",
+            "base": 100,
+            "text": "Bad mouth?",
+            "align": "center",
+            "sortable": true,
+            "value": "communication"
+        },
+        {
+            "name": "payments",
+            "base": 30000,
+            "text": "Are they cash?",
+            "align": "center",
+            "sortable": true,
+            "value": "payments"
+        }
+    ]
+}

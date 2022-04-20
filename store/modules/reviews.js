@@ -19,14 +19,22 @@ export const reviews = {
             consumers: { rows: [], count: 0 },
             reviews: { rows: [], count: 0 }
         },
-        selectedReview: {},
+        entityReviews: {
+            openDialog: false,
+            type: "",
+            id: "",
+            average: {},
+            all: { rows: [], count: 0 }
+        },
         daysBefore: 999999
     },
 
     mutations: {
         setOverviewReviews: (state, payload) => state.overviewReviews = payload,
         setAllReviews: (state, payload) => state.allReviews = { ...state.allReviews, ...payload },
-        setSelectedReview: (state, payload) => state.selectedReview = payload,
+        setEntityReviews: (state, payload) => state.entityReviews = { ...state.entityReviews, ...payload },
+        setEntityInfo: (state, payload) => state.entityReviews = { ...state.entityReviews, ...payload },
+        toggleEntityDialog: (state) => state.entityReviews.openDialog = !state.entityReviews.openDialog,
         setDaysBefore: (state, payload) => state.daysBefore = payload,
     },
 
@@ -75,8 +83,19 @@ export const reviews = {
             if (payload.type === "reviews") response = await this.$axios.$get(`/backend/reviews?${queryBuilder(payload)}`);
             return commit('setAllReviews', { [payload.type]: { rows: response.rows, count: response.count.length || response.count } });
         },
-        setSelectedReview({ commit }, payload) {
-            commit('setSelectedReview', payload);
+        async getEntityReviews({ commit, state }, payload = {}) {
+            payload.daysBefore = state.daysBefore;
+            payload.id = state.entityReviews.id;
+            console.log({ payload });
+            const [{ rows: average }, all] = await Promise.all([
+                this.$axios.$get(`/backend/reviews/average/${state.entityReviews.type}?${queryBuilder(payload)}`),
+                this.$axios.$get(`/backend/reviews/${state.entityReviews.type}?${queryBuilder(payload)}`)
+            ]);
+
+            commit('setEntityReviews', {
+                average,
+                all
+            });
         },
         setDaysBefore({ commit }, payload) {
             commit('setDaysBefore', payload);
@@ -90,8 +109,11 @@ export const reviews = {
         getAllReviews: (state) => (type) => {
             return state.allReviews[type] || []
         },
-        getSelectedReview: (state) => {
-            return state.selectedReview
+        getEntityReviews: (state) => {
+            return state.entityReviews
+        },
+        openEntityDialog: (state) => {
+            return state.entityReviews.openDialog
         },
         getDaysBefore: (state) => {
             return state.daysBefore

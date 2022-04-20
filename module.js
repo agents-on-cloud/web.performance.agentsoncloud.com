@@ -56,7 +56,8 @@ export default function NuxtModule() {
 
 export const proxy = {
   "/backend/": {
-    target: "https://api.performance.agentsoncloud.com/api/v1",
+    // target: "https://api.performance.agentsoncloud.com/api/v1",
+    target: "http://localhost:3000/api/v1",
     pathRewrite: { "^/backend/": "" },
   },
 }

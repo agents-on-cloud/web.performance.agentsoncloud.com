@@ -41,8 +41,15 @@
         @openDialog="openDialogHandler('reviews')"
         :reviews="getOverviewReviews('reviews')"
       />
-      <v-dialog :overlay-opacity="0.95" v-model="dialog" class="max-w-7xl">
-        <ListTableWrapper :toggleUpdate="toggleUpdate" :type="type" />
+      <v-dialog :overlay-opacity="0.95" v-model="dialog1" class="max-w-7xl">
+        <ListEntities :type="type" />
+      </v-dialog>
+      <v-dialog
+        :overlay-opacity="0.95"
+        v-model="openEntityDialog"
+        class="max-w-7xl"
+      >
+        <CardDetailsEntity />
       </v-dialog>
     </main>
   </section>
@@ -52,27 +59,30 @@
 import { mapGetters } from "vuex";
 
 export default {
-  layout:'dashboard',
   data() {
     return {
-      dialog: false,
+      dialog1: false,
       type: null,
-      toggleUpdate: false,
     };
   },
   methods: {
     openDialogHandler(type) {
       this.type = type;
-      this.dialog = true;
-      this.toggleUpdate = !this.toggleUpdate
+      this.dialog1 = true;
     },
   },
   computed: {
-    ...mapGetters(["getOverviewReviews"]),
+    ...mapGetters(["getOverviewReviews", "openEntityDialog"]),
   },
-  mounted() {
+  async mounted() {
     this.$store.dispatch("getOverviewReviews");
     this.$store.dispatch("getAllReviews");
+    this.$store.commit("setEntityInfo", {
+      id: "Zola Treutel",
+      type: "providers",
+    });
+    await this.$store.dispatch("getEntityReviews");
+    await this.$store.commit("toggleEntityDialog")
   },
 };
 </script>
