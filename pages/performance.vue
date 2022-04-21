@@ -9,40 +9,43 @@
     <!-- TODO: The facilities should be included, but everything is averaged per faiclity and is chosen first  -->
     <FiltersDaysBefore />
     <main id="overview-container" class="mb-15 relative">
-      <OverviewFacilities
+      <OverviewCardEntities
         @openDialog="openDialogHandler('facilities')"
-        :facilityReviews="getOverviewReviews('facilities')"
+        :entityReviews="getOverviewReviews('facilities')"
+        title="Facilities Overview"
       />
       <div class="flex gap-5">
-        <OverviewProviders
+        <OverviewTableEntities
           class="w-1/2"
           @openDialog="openDialogHandler('providers')"
           :providerReviews="getOverviewReviews('providers')"
         />
-        <OverviewConsumers
+        <OverviewTableEntities
           class="w-1/2"
           @openDialog="openDialogHandler('consumers')"
           :consumerReviews="getOverviewReviews('consumers')"
         />
       </div>
       <div class="flex gap-5">
-        <OverviewServices
+        <OverviewCardEntities
           class="w-1/2"
           @openDialog="openDialogHandler('services')"
-          :serviceReviews="getOverviewReviews('services')"
+          :entityReviews="getOverviewReviews('services')"
+          title="Services Overview"
         />
-        <OverviewSuppliers
+        <OverviewCardEntities
           class="w-1/2"
           @openDialog="openDialogHandler('suppliers')"
-          :supplierReviews="getOverviewReviews('suppliers')"
+          :entityReviews="getOverviewReviews('suppliers')"
+          title="Suppliers Overview"
         />
       </div>
       <OverviewReviews
         @openDialog="openDialogHandler('reviews')"
         :reviews="getOverviewReviews('reviews')"
       />
-      <v-dialog :overlay-opacity="0.95" v-model="dialog1" class="max-w-7xl">
-        <ListTableWrapper :type="type" />
+      <v-dialog :overlay-opacity="0.95" v-model="openDialog" class="max-w-7xl">
+        <TablePerformanceWrapper :type="type" />
       </v-dialog>
       <v-dialog
         :overlay-opacity="0.95"
@@ -61,14 +64,14 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      dialog1: false,
+      openDialog: false,
       type: null,
     };
   },
   methods: {
     openDialogHandler(type) {
       this.type = type;
-      this.dialog1 = true;
+      this.openDialog = true;
     },
   },
   computed: {
@@ -82,7 +85,7 @@ export default {
       type: "providers",
     });
     await this.$store.dispatch("getEntityReviews");
-    await this.$store.commit("toggleEntityDialog")
+    await this.$store.commit("toggleEntityDialog");
   },
 };
 </script>

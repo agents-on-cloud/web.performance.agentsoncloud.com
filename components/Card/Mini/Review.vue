@@ -1,5 +1,5 @@
 <template>
-  <v-card elevation="10" class="w-64 mx-3 px-4">
+  <v-card elevation="10" class="w-64 mx-3 p-4">
     <h4 class="text-center mb-4 clamped-title">
       {{ review.reviewedName }} Review
     </h4>

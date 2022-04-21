@@ -1,17 +1,18 @@
 <template>
   <v-card id="facility-mini-card" class="px-10 py-5" elevation="10">
-    <div>
-      <h4 class="max-w-full text-ellipsis whitespace-nowrap mb-5 text-center">
-        <!-- TODO: Embedd the type into facility type maybe? -->
-        <!-- <v-icon class="mr-2">
-          {{
-            facility.reviewedName.includes("room") ? "mdi-server" : "mdi-cog"
-          }}
-        </v-icon>
-        {{ facility.reviewedName.replace(/ (room|machine)/g, "") }} -->
-      </h4>
-      <!-- <MetricsScore :value="facility.score" /> -->
-    </div>
+    <Container>
+      <CardMiniReview
+        class="w-80"
+        v-for="review of getEntityReviews.all.rows"
+        :key="review.id"
+        :review="review"
+      />
+    </Container>
+    <v-pagination
+      v-model="page"
+      :length="Math.round(parseFloat(getEntityReviews.all.count / 8))"
+      :total-visible="10"
+    ></v-pagination>
   </v-card>
 </template>
 
@@ -20,10 +21,22 @@ import { mapGetters } from "vuex";
 
 export default {
   props: ["type", "id"],
+  data: () => ({
+    page: 1,
+  }),
   computed: {
     ...mapGetters(["getEntityReviews"]),
   },
   mounted: function () {
+    console.log(this.getEntityReviews.all.rows);
+  },
+  watch: {
+    async page(curr, prev) {
+      const offset = (curr - 1) * 8;
+      await this.$store.dispatch("sortEntityReviews", { offset });
+      console.log(this.getEntityReviews.all.rows);
+      console.log(curr + " page");
+    },
   },
 };
 </script>

@@ -75,7 +75,7 @@ export const reviews = {
                     reviews: { rows: response[5].rows, count: response[5].count }
                 });
         },
-        async sortReviews({ commit, state }, payload = { type: "reviews", limit: 10, offset: null, orderBy: null, orderDesc: null }) {
+        async sortGroupedReviews({ commit, state }, payload = { type: "reviews", limit: 10, offset: null, orderBy: null, orderDesc: null }) {
             payload.daysBefore = state.daysBefore;
             let response;
 
@@ -89,12 +89,22 @@ export const reviews = {
 
             const [{ rows: average }, all] = await Promise.all([
                 this.$axios.$get(`/backend/reviews/average/${state.entityReviews.type}?${queryBuilder(payload)}`),
-                this.$axios.$get(`/backend/reviews/${state.entityReviews.type}?${queryBuilder(payload)}`)
+                this.$axios.$get(`/backend/reviews/${state.entityReviews.type}?${queryBuilder(payload)}&limit=8`)
             ]);
 
             commit('setEntityReviews', {
                 average,
                 all
+            });
+        },
+        async sortEntityReviews({ commit, state }, payload = { offset: 0 }) {
+            payload.daysBefore = state.daysBefore;
+            payload.id = state.entityReviews.id;
+
+            const all = await this.$axios.$get(
+                `/backend/reviews/${state.entityReviews.type}?${queryBuilder(payload)}&limit=8`);
+            commit('setEntityReviews', {
+                all,
             });
         },
         setDaysBefore({ commit }, payload) {
