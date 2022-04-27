@@ -4,7 +4,7 @@
       <v-icon class="mx-2" small>mdi-star-circle</v-icon>
       Score
     </h4>
-    <div class="text-sm">{{ parseInt(value) }}<span> %</span></div>
+    <div class="text-sm">{{ parseInt(value*100) }}<span> %</span></div>
   </div>
 </template>
 

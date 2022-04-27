@@ -17,13 +17,15 @@
       <div class="flex gap-5">
         <OverviewTableEntities
           class="w-1/2"
+          type="providers"
           @openDialog="openDialogHandler('providers')"
-          :providerReviews="getOverviewReviews('providers')"
+          :reviews="getOverviewReviews('providers')"
         />
         <OverviewTableEntities
           class="w-1/2"
+          type="consumers"
           @openDialog="openDialogHandler('consumers')"
-          :consumerReviews="getOverviewReviews('consumers')"
+          :reviews="getOverviewReviews('consumers')"
         />
       </div>
       <div class="flex gap-5">
@@ -80,12 +82,14 @@ export default {
   async mounted() {
     this.$store.dispatch("getOverviewReviews");
     this.$store.dispatch("getAllReviews");
+    this.$store.dispatch("getMetrics");
     this.$store.commit("setEntityInfo", {
       id: "Zola Treutel",
       type: "providers",
     });
     await this.$store.dispatch("getEntityReviews");
-    await this.$store.commit("toggleEntityDialog");
+
+    this.$store.commit("toggleEntityDialog");
   },
 };
 </script>

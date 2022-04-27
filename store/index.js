@@ -1,10 +1,11 @@
 import Vuex from 'vuex'
-import { reviews } from './modules'
+import { reviews, metrics } from './modules'
 
 const createStore = () => {
     return new Vuex.Store({
         modules: {
-            reviews
+            reviews,
+            metrics
         },
     })
 }

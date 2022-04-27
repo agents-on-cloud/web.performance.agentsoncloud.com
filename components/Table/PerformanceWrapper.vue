@@ -10,10 +10,10 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { parseTableData } from "../../utils";
+import { parseTableHeaders } from "../../utils";
 
 export default {
-  props: ["type", "requiredKeys"],
+  props: ["type"],
   data() {
     return {
       headers: [],
@@ -24,9 +24,16 @@ export default {
     };
   },
   methods: {
-    updateTable() {
-      ({ headers: this.headers, items: this.items } = parseTableData(
-        this.requiredKeys,
+    async updateTable() {
+      await this.$store.dispatch("getRequiredMetrics", {
+        reviewedType: this.type,
+      });
+
+      const requiredKeys = await this.getRequiredMetrics(this.type);
+      if (this.type !== "reviews") requiredKeys?.push("number_of_reviews");
+
+      ({ headers: this.headers, items: this.items } = parseTableHeaders(
+        requiredKeys,
         this.getAllReviews(this.type).rows
       ));
 
@@ -50,7 +57,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["getAllReviews"]),
+    ...mapGetters(["getAllReviews", "getRequiredMetrics"]),
   },
   mounted() {
     this.updateTable();

@@ -39,13 +39,12 @@ export const reviews = {
     },
 
     actions: {
-        // TODO: FIX THIS INTO QUERY BUILDER
-        async getOverviewReviews({ commit, state }, payload = { limit: 5 }) {
+        async getOverviewReviews({ commit, state }, payload = { limit: 5, orderBy: ['score'], orderDesc: ['false'] }) {
             payload.daysBefore = state.daysBefore;
 
             const promiseArray = ["facilities", "providers", "services", "suppliers", "consumers"]
-                .map(entity => this.$axios.$get(`/backend/reviews/average/${entity}?limit=5&daysBefore=${state.daysBefore}`));
-            promiseArray.push(this.$axios.$get(`/backend/reviews?limit=5&daysBefore=${state.daysBefore}`));
+                .map(entity => this.$axios.$get(`/backend/reviews/average/${entity}?${queryBuilder(payload)}`));
+            promiseArray.push(this.$axios.$get(`/backend/reviews?${queryBuilder(payload)}`));
 
             const response = await Promise.all(promiseArray);
             return commit('setOverviewReviews',
@@ -58,7 +57,7 @@ export const reviews = {
                     reviews: response[5].rows
                 });
         },
-        async getAllReviews({ commit, state }, payload = { limit: 10, offset: null, orderBy: null, orderDesc: null }) {
+        async getAllReviews({ commit, state }, payload = { limit: 10, offset: null, orderBy: ['score'], orderDesc: ['false'] }) {
             payload.daysBefore = state.daysBefore;
             const promiseArray = ["facilities", "providers", "services", "suppliers", "consumers"]
                 .map(entity => this.$axios.$get(`/backend/reviews/average/${entity}?${queryBuilder(payload)}`));

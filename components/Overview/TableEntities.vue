@@ -1,7 +1,7 @@
 <template>
   <v-card class="flex flex-row">
-    <v-card-title
-      >Consumer Overview
+    <v-card-title style="text-transform: capitalize;"
+      >{{type}} Overview
       <v-btn icon @click="$emit('openDialog')">
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
@@ -10,49 +10,36 @@
     <Container>
       <section class="w-full">
         <!-- list of providers -->
-        <v-data-table
-          :headers="headers"
-          :items="consumers"
-          :items-per-page="5"
-          class="elevation-1"
-          hide-default-footer
-        >
-          <template #[`header.stars`]>Behavioral (%)</template>
-          <template #[`item.score`]="{ item }">
-            <MetricsStars :value="item.score" />
-          </template>
-          <template #[`item.stars`]="{ item }">
-            <MetricsStars :value="item.stars" />
-          </template>
-        </v-data-table>
+        <ListTable :headers="headers" :items="items" class="elevation-1" :hideFooter="true" />
       </section>
     </Container>
   </v-card>
 </template>
 
 <script>
-import { parseConsumersTable } from "../../utils";
+import { parseTableHeaders } from "../../utils";
 export default {
-  props: ["consumerReviews"],
+  props: ["type", "reviews"],
   data() {
     return {
       headers: [],
-      consumers: [],
+      items: [],
     };
   },
   methods: {
-    updateTable() {
-      ({ headers: this.headers, items: this.consumers } = parseConsumersTable(
-        this.consumerReviews
+    async updateTable() {
+      ({ headers: this.headers, items: this.items } = parseTableHeaders(
+        ["number_of_reviews"],
+        this.reviews
       ));
     },
   },
   watch: {
-    consumerReviews() {
+    reviews() {
       this.updateTable();
     },
   },
-  mounted() {
+  async mounted() {
     this.updateTable();
   },
 };

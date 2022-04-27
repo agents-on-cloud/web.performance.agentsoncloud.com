@@ -1,4 +1,6 @@
 <template>
+<div>
+
   <v-rating
     title="Durability"
     empty-icon="mdi-star-outline"
@@ -6,12 +8,16 @@
     half-icon="mdi-star-half-full"
     hover
     length="5"
-    :value="value / 20"
+    :value="value * 100 / 20"
+    v-if="value"
     half-increments
     readonly
     class="text-center"
     size="26"
   ></v-rating>
+  <span v-else>-</span>
+</div>
+  
 </template>
 
 <script>

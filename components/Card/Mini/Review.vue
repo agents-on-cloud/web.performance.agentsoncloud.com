@@ -29,7 +29,7 @@
         <div class="text-center flex flex-grow-0 justify-center">
           <h5>Total Score</h5>
           <span class="text-gray-400 text-xs text-caption ml-2">
-            ({{ (review.score / 20).toFixed(1) }})
+            ({{ (review.score * 100).toFixed(1) }})
           </span>
         </div>
         <v-rating
@@ -39,7 +39,7 @@
           half-icon="mdi-star-half-full"
           hover
           length="5"
-          :value="review.score / 20"
+          :value="review.score * 100 / 20"
           half-increments
           readonly
           class="text-center"
