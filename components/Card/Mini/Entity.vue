@@ -1,14 +1,16 @@
 <template>
   <v-card id="Entity-mini-card" class="px-10 py-5" elevation="10">
     <div>
-      <h4 class="max-w-full text-ellipsis whitespace-nowrap mb-5 text-center">
+      <h4 class="max-w-full flex mb-5 text-center">
         <!-- TODO: Embedd the type into entity type maybe? -->
         <v-icon class="mr-2">
-          {{
-            entity.reviewedName.includes("room") ? "mdi-server" : "mdi-cog"
-          }}
+          {{ entity.reviewedName.includes("room") ? "mdi-server" : "mdi-cog" }}
         </v-icon>
-        {{ entity.reviewedName }}
+        <MetricsName
+          :name="entity.reviewedName"
+          :type="entity.reviewedType"
+          :id="entity.reviewedId"
+        />
       </h4>
       <MetricsScore :value="entity.score" />
     </div>

@@ -2,7 +2,7 @@
 <div>
 
   <v-rating
-    title="Durability"
+    :title="(value * 100 / 20).toFixed(1)"
     empty-icon="mdi-star-outline"
     full-icon="mdi-star"
     half-icon="mdi-star-half-full"

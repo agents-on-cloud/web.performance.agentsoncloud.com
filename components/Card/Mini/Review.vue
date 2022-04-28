@@ -1,7 +1,11 @@
 <template>
   <v-card elevation="10" class="w-64 mx-3 p-4">
-    <h4 class="text-center mb-4 clamped-title">
-      {{ review.reviewedName }} Review
+    <h4 v-if="!hideTitle" class="text-center mb-4 clamped-title">
+      <MetricsName
+        :name="review.reviewedName + ' Review'"
+        :type="review.reviewedType"
+        :id="review.reviewedId"
+      />
     </h4>
     <div class="h-60 flex flex-col">
       <header class="mb-2 flex flex-grow-0">
@@ -13,8 +17,12 @@
                 : "mdi-server"
             }}
           </v-icon>
-          <h5 class="self-center text-left one-line">
-            {{ review.reviewerName }}
+          <h5 class="self-center text-left max-w-[90px]">
+            <MetricsName
+              :name="review.reviewerName"
+              type="providers"
+              :id="review.reviewerId"
+            />
           </h5>
         </div>
         <div class="text-center self-start w-32 flex-grow">
@@ -25,33 +33,28 @@
         </div>
       </header>
       <v-divider></v-divider>
-      <div class="flex flex-col justify-center">
+      <div class="flex flex-col justify-center gap-1">
         <div class="text-center flex flex-grow-0 justify-center">
           <h5>Total Score</h5>
           <span class="text-gray-400 text-xs text-caption ml-2">
             ({{ (review.score * 100).toFixed(1) }})
           </span>
         </div>
-        <v-rating
-          title="Durability"
-          empty-icon="mdi-star-outline"
-          full-icon="mdi-star"
-          half-icon="mdi-star-half-full"
-          hover
-          length="5"
-          :value="review.score * 100 / 20"
-          half-increments
-          readonly
-          class="text-center"
-        ></v-rating>
+        <MetricsStars :value="review.score" />
+        <div class="text-center flex flex-grow-0 justify-center mt-5">
+          <h5>Total Social Score</h5>
+          <span class="text-gray-400 text-xs text-caption ml-2">
+            ({{ (review.socialScore * 100).toFixed(1) }})
+          </span>
+        </div>
+        <MetricsStars v-if="review.socialScore" :value="review.socialScore" />
       </div>
-      <v-btn class="mb-5" elevation="2">Open Details</v-btn>
     </div>
   </v-card>
 </template>
 
 <script>
 export default {
-  props: ["review"],
+  props: ["review", "hideTitle"],
 };
 </script>

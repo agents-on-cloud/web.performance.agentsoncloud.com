@@ -12,13 +12,13 @@ export const parseTableHeaders = (requiredKeys = [], entitiesArray = []) => {
     let metricsObject = {};
     const items = entitiesArray.map(entity => {
         if (requiredKeys) requiredKeys.forEach(metric => (metricsObject[metric] = entity[metric]));
-        const { reviewedName, number_of_reviews, reviewedType, score, socialScore } = entity;
+        const { reviewedId, reviewedName, reviewerId, reviewerName, number_of_reviews, reviewedType, score, socialScore } = entity;
 
         return {
-            reviewedName, reviewedType, number_of_reviews, score, socialScore,
+            reviewedId, reviewedName, reviewerId, reviewerName, number_of_reviews, reviewedType, score, socialScore,
             ...metricsObject,
         };
-    }); 
-    
+    });
+
     return { headers, items };
 }

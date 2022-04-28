@@ -7,7 +7,7 @@
     group
     class="justify-end w-full my-3 pr-6"
   >
-    <v-btn value="">All</v-btn>
+    <v-btn :value="999999">All</v-btn>
     <v-btn :value="365">1 Year</v-btn>
     <v-btn :value="30">1 month</v-btn>
     <v-btn :value="7">1 week</v-btn>
@@ -15,23 +15,24 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      daysBefore: "",
+      daysBefore: 999999,
     };
   },
   methods: {
     async handler() {
       this.$store.dispatch("setDaysBefore", this.daysBefore);
-      await this.$store.dispatch("getAllReviews");
     },
   },
+  computed: {
+    ...mapGetters(["getDaysBefore"]),
+  },
 
-  watch: {
-    daysBefore(before, after) {
-      this.$store.dispatch("getOverviewReviews");
-    },
+  mounted: function () {
+    this.daysBefore = this.getDaysBefore;
   },
 };
 </script>

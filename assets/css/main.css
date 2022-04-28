@@ -31,6 +31,12 @@ h6 {
     font-size: 12px;
 }
 
+.one-line {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 ::-webkit-scrollbar {
     width: 4px;
     height: 4px;

@@ -24,7 +24,8 @@ export const reviews = {
             type: "",
             id: "",
             average: {},
-            all: { rows: [], count: 0 }
+            all: { rows: [], count: 0 },
+            scores: []
         },
         daysBefore: 999999
     },
@@ -34,7 +35,7 @@ export const reviews = {
         setAllReviews: (state, payload) => state.allReviews = { ...state.allReviews, ...payload },
         setEntityReviews: (state, payload) => state.entityReviews = { ...state.entityReviews, ...payload },
         setEntityInfo: (state, payload) => state.entityReviews = { ...state.entityReviews, ...payload },
-        toggleEntityDialog: (state) => state.entityReviews.openDialog = !state.entityReviews.openDialog,
+        toggleEntityDialog: (state, payload) => state.entityReviews.openDialog = payload,
         setDaysBefore: (state, payload) => state.daysBefore = payload,
     },
 
@@ -82,28 +83,34 @@ export const reviews = {
             if (payload.type === "reviews") response = await this.$axios.$get(`/backend/reviews?${queryBuilder(payload)}`);
             return commit('setAllReviews', { [payload.type]: { rows: response.rows, count: response.count.length || response.count } });
         },
-        async getEntityReviews({ commit, state }, payload = {}) {
+        async getEntityReviews({ commit, state }, payload = {orderBy: "createdAt", orderDesc: ["true"]}) {
             payload.daysBefore = state.daysBefore;
-            payload.id = state.entityReviews.id;
+            payload.reviewedId = state.entityReviews.id;
 
-            const [{ rows: average }, all] = await Promise.all([
+            const [{ rows: [average] }, all, scores] = await Promise.all([
                 this.$axios.$get(`/backend/reviews/average/${state.entityReviews.type}?${queryBuilder(payload)}`),
-                this.$axios.$get(`/backend/reviews/${state.entityReviews.type}?${queryBuilder(payload)}&limit=8`)
+                this.$axios.$get(`/backend/reviews/${state.entityReviews.type}?${queryBuilder(payload)}&limit=4`),
+                this.$axios.$get(`/backend/reviews/normal/scores/${state.entityReviews.type}?${queryBuilder(payload)}&limit=4`)
             ]);
 
             commit('setEntityReviews', {
                 average,
-                all
+                all,
+                scores
             });
         },
         async sortEntityReviews({ commit, state }, payload = { offset: 0 }) {
             payload.daysBefore = state.daysBefore;
-            payload.id = state.entityReviews.id;
+            payload.reviewedId = state.entityReviews.id;
 
-            const all = await this.$axios.$get(
-                `/backend/reviews/${state.entityReviews.type}?${queryBuilder(payload)}&limit=8`);
+            const [all, scores] = await Promise.all([
+                this.$axios.$get(
+                    `/backend/reviews/${state.entityReviews.type}?${queryBuilder(payload)}&limit=4`),
+                this.$axios.$get(`/backend/reviews/normal/scores/${state.entityReviews.type}?${queryBuilder(payload)}&limit=4`)
+            ])
             commit('setEntityReviews', {
                 all,
+                scores
             });
         },
         setDaysBefore({ commit }, payload) {

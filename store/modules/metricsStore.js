@@ -20,9 +20,7 @@ export const metrics = {
         },
 
         async getRequiredMetrics({ commit, state }, payload = { reviewedType, orgId: -1 }) {
-            console.log("building", payload.reviewedType);
             if (!payload.reviewedType) return;
-            console.log("built");
 
             const data = await this.$axios.$get(`/backend/metrics/required/${payload.reviewedType}?${queryBuilder(payload)}`);
             return commit('setRequiredMetrics', { type: payload.reviewedType, data: Object.keys(data) });

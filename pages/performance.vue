@@ -49,13 +49,7 @@
       <v-dialog :overlay-opacity="0.95" v-model="openDialog" class="max-w-7xl">
         <TablePerformanceWrapper :type="type" />
       </v-dialog>
-      <v-dialog
-        :overlay-opacity="0.95"
-        v-model="openEntityDialog"
-        class="max-w-7xl"
-      >
-        <CardDetailsEntity />
-      </v-dialog>
+      <ModalEntityDetails />
     </main>
   </section>
 </template>
@@ -77,19 +71,19 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["getOverviewReviews", "openEntityDialog"]),
+    ...mapGetters(["getOverviewReviews", "getDaysBefore"]),
   },
-  async mounted() {
+  mounted: async function () {
+    // fill these requests on mount
     this.$store.dispatch("getOverviewReviews");
     this.$store.dispatch("getAllReviews");
     this.$store.dispatch("getMetrics");
-    this.$store.commit("setEntityInfo", {
-      id: "Zola Treutel",
-      type: "providers",
-    });
-    await this.$store.dispatch("getEntityReviews");
-
-    this.$store.commit("toggleEntityDialog");
+  },
+  watch: {
+    getDaysBefore(before, after) {
+      this.$store.dispatch("getAllReviews");
+      this.$store.dispatch("getOverviewReviews");
+    },
   },
 };
 </script>

@@ -1,11 +1,17 @@
 <template>
-  <ListTable
-    :headers="headers"
-    :items="items"
-    :itemsCount="itemsCount"
-    :loading="loading"
-    @trigger-update="fetchUpdate"
-  />
+  <v-card id="entity-mini-card" class="px-10 py-5" elevation="10">
+    <div class="flex justify-between">
+      <h2 class="capitalize">{{ type }} - List</h2>
+      <FiltersDaysBefore class="flex-0" />
+    </div>
+    <ListTable
+      :headers="headers"
+      :items="items"
+      :itemsCount="itemsCount"
+      :loading="loading"
+      @trigger-update="fetchUpdate"
+    />
+  </v-card>
 </template>
 
 <script>
@@ -57,7 +63,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["getAllReviews", "getRequiredMetrics"]),
+    ...mapGetters(["getAllReviews", "getRequiredMetrics", "getDaysBefore"]),
   },
   mounted() {
     this.updateTable();
@@ -67,6 +73,9 @@ export default {
       this.options.page = 1;
       this.options.sortBy = [];
       this.options.sortDesc = ["false"];
+      this.updateTable();
+    },
+    getDaysBefore() {
       this.updateTable();
     },
   },

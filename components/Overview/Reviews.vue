@@ -2,7 +2,7 @@
   <v-card class="flex flex-row">
     <v-card-title
       >Reviews Needing Attention
-      <v-btn icon @click="$emit('openDialog')">
+      <v-btn icon @click.stop="$emit('openDialog')">
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
     </v-card-title>
