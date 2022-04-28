@@ -1,7 +1,7 @@
 <template>
   <v-card class="flex flex-row">
     <v-card-title>
-      Facilities Overview
+      {{ title }}
       <v-btn icon @click="$emit('openDialog')">
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
@@ -9,10 +9,10 @@
     <!-- TODO: Facilities should be displayed as nested, with multiple facilities  -->
     <Container>
       <!-- list of facilities -->
-      <CardMiniFacility
-        v-for="facility of facilityReviews"
-        :facility="facility"
-        :key="facility.id"
+      <CardMiniEntity
+        v-for="entity of entityReviews"
+        :entity="entity"
+        :key="entity.id"
       />
     </Container>
   </v-card>
@@ -20,6 +20,6 @@
 
 <script>
 export default {
-  props: ["facilityReviews", "worstReviews"],
+  props: ["entityReviews", "title"],
 };
 </script>

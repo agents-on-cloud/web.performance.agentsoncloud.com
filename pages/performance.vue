@@ -9,40 +9,52 @@
     <!-- TODO: The facilities should be included, but everything is averaged per faiclity and is chosen first  -->
     <FiltersDaysBefore />
     <main id="overview-container" class="mb-15 relative">
-      <OverviewFacilities
+      <OverviewCardEntities
         @openDialog="openDialogHandler('facilities')"
-        :facilityReviews="getOverviewReviews('facilities')"
+        :entityReviews="getOverviewReviews('facilities')"
+        title="Facilities Overview"
       />
       <div class="flex gap-5">
-        <OverviewProviders
+        <OverviewTableEntities
           class="w-1/2"
+          type="providers"
           @openDialog="openDialogHandler('providers')"
-          :providerReviews="getOverviewReviews('providers')"
+          :reviews="getOverviewReviews('providers')"
         />
-        <OverviewConsumers
+        <OverviewTableEntities
           class="w-1/2"
+          type="consumers"
           @openDialog="openDialogHandler('consumers')"
-          :consumerReviews="getOverviewReviews('consumers')"
+          :reviews="getOverviewReviews('consumers')"
         />
       </div>
       <div class="flex gap-5">
-        <OverviewServices
+        <OverviewCardEntities
           class="w-1/2"
           @openDialog="openDialogHandler('services')"
-          :serviceReviews="getOverviewReviews('services')"
+          :entityReviews="getOverviewReviews('services')"
+          title="Services Overview"
         />
-        <OverviewSuppliers
+        <OverviewCardEntities
           class="w-1/2"
           @openDialog="openDialogHandler('suppliers')"
-          :supplierReviews="getOverviewReviews('suppliers')"
+          :entityReviews="getOverviewReviews('suppliers')"
+          title="Suppliers Overview"
         />
       </div>
       <OverviewReviews
         @openDialog="openDialogHandler('reviews')"
         :reviews="getOverviewReviews('reviews')"
       />
-      <v-dialog :overlay-opacity="0.95" v-model="dialog" class="max-w-7xl">
-        <ListTableWrapper :toggleUpdate="toggleUpdate" :type="type" />
+      <v-dialog :overlay-opacity="0.95" v-model="openDialog" class="max-w-7xl">
+        <TablePerformanceWrapper :type="type" />
+      </v-dialog>
+      <v-dialog
+        :overlay-opacity="0.95"
+        v-model="openEntityDialog"
+        class="max-w-7xl"
+      >
+        <CardDetailsEntity />
       </v-dialog>
     </main>
   </section>
@@ -52,27 +64,32 @@
 import { mapGetters } from "vuex";
 
 export default {
-  layout:'dashboard',
   data() {
     return {
-      dialog: false,
+      openDialog: false,
       type: null,
-      toggleUpdate: false,
     };
   },
   methods: {
     openDialogHandler(type) {
       this.type = type;
-      this.dialog = true;
-      this.toggleUpdate = !this.toggleUpdate
+      this.openDialog = true;
     },
   },
   computed: {
-    ...mapGetters(["getOverviewReviews"]),
+    ...mapGetters(["getOverviewReviews", "openEntityDialog"]),
   },
-  mounted() {
+  async mounted() {
     this.$store.dispatch("getOverviewReviews");
     this.$store.dispatch("getAllReviews");
+    this.$store.dispatch("getMetrics");
+    this.$store.commit("setEntityInfo", {
+      id: "Zola Treutel",
+      type: "providers",
+    });
+    await this.$store.dispatch("getEntityReviews");
+
+    this.$store.commit("toggleEntityDialog");
   },
 };
 </script>

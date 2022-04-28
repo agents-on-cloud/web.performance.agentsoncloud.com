@@ -35,7 +35,7 @@ export default {
   methods: {
     parseAmount() {
       this.parsedAmount =
-        this.value > 1000 ? parseInt(this.value / 1000) + "K" : this.value;
+        this.value > 1000 ? parseInt(this.value / 1000) + "K" : parseInt(this.value);
     },
   },
   mounted() {
