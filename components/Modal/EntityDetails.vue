@@ -31,6 +31,7 @@ export default {
 <style>
 .v-dialog--active {
   position: absolute;
-  top: 50px;
+  top: 5px;
+  max-height: 99% !important;
 }
 </style>

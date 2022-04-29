@@ -1,8 +1,8 @@
 <template>
   <v-card class="mt-4 mx-auto">
     <v-sheet
-      class="relative mx-auto mb-4"
-      color="cyan"
+      class="relative mx-auto mb-4 h-[300px]"
+      color="#8ea59f"
       elevation="12"
       max-width="calc(100% - 32px)"
     >
@@ -27,7 +27,7 @@
           :value="value"
           color="#437467"
           line-width="0.5"
-          padding="16"
+          padding="10"
           label-size="3"
           smooth
           fill
@@ -37,7 +37,7 @@
           :value="allValues"
           color="#003333"
           line-width="1"
-          padding="16"
+          padding="10"
           smooth
         ></v-sparkline>
       </div>
