@@ -51,7 +51,6 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    '../storybook-nuxt/module'
   ],
 
   axios: {
