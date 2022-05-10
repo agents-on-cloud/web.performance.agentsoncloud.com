@@ -1,11 +1,24 @@
 <template>
   <v-card elevation="10" class="w-64 mx-3 p-4">
-    <h4 v-if="!hideTitle" class="text-center mb-4 clamped-title">
-      <MetricsName
-        :name="review.reviewedName + ' Review'"
-        :type="review.reviewedType"
-        :id="review.reviewedId"
-      />
+    <ModalReviewDetails
+      :review="review"
+      :openModal="openReviewModal"
+      @closeReviewModal="toggleReviewModal(false)"
+    />
+    <h4 class="text-center mb-4 clamped-title">
+      <div
+        class="
+          w-full
+          one-line
+          cursor-pointer
+          hover:text-cyan-200
+          inline-block
+          items-center
+        "
+        @click.stop="toggleReviewModal(true)"
+      >
+        {{ (!hideTitle ? review.reviewedName + " " : "") + "Review" }}
+      </div>
     </h4>
     <div class="h-60 flex flex-col">
       <header class="mb-2 flex flex-grow-0">
@@ -41,7 +54,7 @@
           </span>
         </div>
         <MetricsStars :value="review.score" />
-        <div class="text-center flex flex-grow-0 justify-center mt-5">
+        <div v-if="review.socialScore" class="text-center flex flex-grow-0 justify-center mt-5">
           <h5>Total Social Score</h5>
           <span class="text-gray-400 text-xs text-caption ml-2">
             ({{ (review.socialScore * 100).toFixed(1) }})
@@ -56,5 +69,13 @@
 <script>
 export default {
   props: ["review", "hideTitle"],
+  data: () => ({
+    openReviewModal: false,
+  }),
+  methods: {
+    async toggleReviewModal(value = false) {
+      this.openReviewModal = value;
+    },
+  },
 };
 </script>

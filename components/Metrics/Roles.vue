@@ -1,10 +1,13 @@
 <template>
-  <div class="text-center">{{ value || "-" }}</div>
+  <div class="text-center">
+    <h4>{{ title }}</h4>
+    <div>{{ value || "-" }}</div>
+  </div>
 </template>
 
 <script>
 export default {
-  props: ["value"],
+  props: ["value", "title"],
 };
 </script>
 

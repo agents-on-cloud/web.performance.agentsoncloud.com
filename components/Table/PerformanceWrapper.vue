@@ -44,6 +44,7 @@ export default {
       ));
 
       this.itemsCount = this.getAllReviews(this.type).count;
+      console.log(this.items);
       typeof this.itemsCount === "object" && (this.itemsCount = 0);
     },
 

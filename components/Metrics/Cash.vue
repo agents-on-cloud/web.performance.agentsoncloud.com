@@ -1,27 +1,30 @@
 <template>
-  <div v-if="!mini" class="text-center self-start">
-    <h5 class="mb-4"><v-icon class="mx-2">mdi-cash</v-icon>Profits</h5>
-    <div class="text-xs flex justify-around gap-2">
-      <div>
-        <!-- TODO: map total from billing and return to fill this part -->
-        <span>Percentile</span>
-        {{ (Math.random() * 100).toFixed(1) }} %
-      </div>
-      <div class="relative">
-        <span>Total</span>
-        {{ value.toFixed(1) }}
-        <span class="absolute -right-3 top-1/2">$</span>
+  <div class="text-center">
+    <h4>{{ title }}</h4>
+    <div v-if="!mini" class="self-start">
+      <h5 class="mb-4"><v-icon class="mx-2">mdi-cash</v-icon>Profits</h5>
+      <div class="text-xs flex justify-around gap-2">
+        <div>
+          <!-- TODO: map total from billing and return to fill this part -->
+          <span>Percentile</span>
+          {{ (Math.random() * 100).toFixed(1) }} %
+        </div>
+        <div class="relative">
+          <span>Total</span>
+          {{ value.toFixed(1) }}
+          <span class="absolute -right-3 top-1/2">$</span>
+        </div>
       </div>
     </div>
-  </div>
-  <div v-else class="text-center">
-    {{ value > 0 ? parsedAmount + " $" : "-" }}
+    <div v-else>
+      {{ value > 0 ? parsedAmount + " $" : "-" }}
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["value", "mini"],
+  props: ["value", "mini", "title"],
   data() {
     return {
       parsedAmount: 0,
@@ -35,7 +38,9 @@ export default {
   methods: {
     parseAmount() {
       this.parsedAmount =
-        this.value > 1000 ? parseInt(this.value / 1000) + "K" : parseInt(this.value);
+        this.value > 1000
+          ? parseInt(this.value / 1000) + "K"
+          : parseInt(this.value);
     },
   },
   mounted() {

@@ -8,7 +8,6 @@
     :loading="loading"
     :hide-default-footer="hideFooter"
     :disable-sort="disableSort"
-    :multi-sort="!disableSort"
   >
     <template #[`header.reviewerName`]="{ header }">
       {{ header.text.toUpperCase() }}

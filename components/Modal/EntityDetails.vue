@@ -5,7 +5,7 @@
     persistent
     class="max-w-7xl"
   >
-    <CardDetailsEntity class="relative" @closeDialog="closeDialog">
+    <CardDetailsEntity class="relative">
       <div class="absolute right-[10px] top-[10px] w-fit">
         <v-icon @click="closeDialog" dark> mdi-close-thick </v-icon>
       </div>

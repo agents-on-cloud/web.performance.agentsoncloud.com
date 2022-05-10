@@ -1,6 +1,9 @@
 <template>
   <div class="text-center">
-    {{ time }}
+    <h4>{{ title }}</h4>
+    <div>
+      {{ time }}
+    </div>
   </div>
 </template>
 
@@ -8,7 +11,7 @@
 import moment from "moment";
 
 export default {
-  props: ["value", "mini"],
+  props: ["value", "mini", "title"],
   data: function () {
     return {
       time: "-",
@@ -17,7 +20,7 @@ export default {
   methods: {
     updateTime() {
       // duration longer than 1 day is represented as that
-      console.log(moment.duration(this.value).asDays() > 1, moment.duration(this.value).asDays());
+      console.log(this.value, moment.duration(this.value).asDays());
       this.time =
         (moment.duration(this.value).asDays() > 1 &&
           moment.duration(this.value).asDays() + " days") ||
@@ -27,6 +30,9 @@ export default {
             .format("HH:mm:ss")) ||
         "-";
     },
+  },
+  mounted: function() {
+    this.updateTime();
   },
   watch: {
     value() {

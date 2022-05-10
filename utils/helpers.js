@@ -1,3 +1,6 @@
+
+export const queryBuilder = (args) => Object.keys(args).map(key => !!args[key] ? `&${key}=${args[key]}` : "").join("");
+
 import { HEADERS as availableHeaders, BASE_HEADERS } from "../utils/CONSTANTS"
 
 // TODO: refactor metrics to start with that exactly

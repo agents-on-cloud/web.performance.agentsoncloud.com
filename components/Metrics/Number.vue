@@ -1,11 +1,14 @@
 <template>
   <div class="text-center">
-    {{ value ? parseInt(value) : "-" }}
+    <h4>{{ title }}</h4>
+    <div>
+      {{ value ? parseInt(value) : "-" }}
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["value"],
+  props: ["value", "title"],
 };
 </script>
