@@ -1,7 +1,7 @@
 <template>
   <v-card id="entity-mini-card" class="px-10 py-5" elevation="10">
     <div class="flex justify-between">
-      <h2 class="capitalize">{{ type }} - List</h2>
+      <h2 class="capitalize whitespace-nowrap">{{ type }} - List</h2>
       <FiltersDaysBefore class="flex-0" />
     </div>
     <ListTable

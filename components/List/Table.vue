@@ -6,8 +6,9 @@
     :options.sync="options"
     :server-items-length="itemsCount"
     :loading="loading"
-    :hide-default-footer="hideFooter || false"
-    multi-sort
+    :hide-default-footer="hideFooter"
+    :disable-sort="disableSort"
+    :multi-sort="!disableSort"
   >
     <template #[`header.reviewerName`]="{ header }">
       {{ header.text.toUpperCase() }}
@@ -67,7 +68,7 @@
 
 <script>
 export default {
-  props: ["headers", "items", "itemsCount", "loading", "hideFooter"],
+  props: ["headers", "items", "itemsCount", "loading", "hideFooter", "disableSort"],
   data() {
     return { options: {} };
   },

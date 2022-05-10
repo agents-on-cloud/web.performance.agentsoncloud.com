@@ -61,6 +61,7 @@ export default {
     value: [],
     allValues: [],
     scoreType: "score",
+    scoresAvailable: true,
   }),
   methods: {
     updateData() {
@@ -72,6 +73,7 @@ export default {
         this.array.length > 12 ? parseInt(this.array.length / 12) : 1;
       let everyXAverage = 0;
 
+      if (!this.array?.[0]?.[this.scoreType]) return (this.scoresAvailable = false);
       this.array.forEach((data, idx) => {
         this.allValues.push(data[this.scoreType]);
         let date = new Date(data.createdAt);

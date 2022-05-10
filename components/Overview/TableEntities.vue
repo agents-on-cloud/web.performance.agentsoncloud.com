@@ -1,7 +1,7 @@
 <template>
   <v-card class="flex flex-row">
-    <v-card-title style="text-transform: capitalize;"
-      >{{type}} Overview
+    <v-card-title style="text-transform: capitalize"
+      >{{ type }} Overview
       <v-btn icon @click.stop="$emit('openDialog')">
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
@@ -10,7 +10,13 @@
     <Container>
       <section class="w-full">
         <!-- list of providers -->
-        <ListTable :headers="headers" :items="items" class="elevation-1" :hideFooter="true" />
+        <ListTable
+          :headers="headers"
+          :items="items"
+          class="elevation-1"
+          :hideFooter="true"
+          :disableSort="true"
+        />
       </section>
     </Container>
   </v-card>
