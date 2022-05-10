@@ -1,7 +1,7 @@
 <template>
   <v-btn-toggle
     @change="handler"
-    v-model="daysBefore"
+    :value="getDaysBefore"
     tile
     color="white accent-5"
     group
@@ -17,22 +17,13 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  data() {
-    return {
-      daysBefore: 999999,
-    };
-  },
   methods: {
-    async handler() {
-      this.$store.dispatch("setDaysBefore", this.daysBefore);
+    async handler(value) {
+      this.$store.dispatch("setDaysBefore", value);
     },
   },
   computed: {
     ...mapGetters(["getDaysBefore"]),
-  },
-
-  mounted: function () {
-    this.daysBefore = this.getDaysBefore;
   },
 };
 </script>
