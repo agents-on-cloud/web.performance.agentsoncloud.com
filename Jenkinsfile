@@ -21,7 +21,7 @@ pipeline {
                         execCommand: "cd /var/www/ && git clone --branch release_1 https://github.com/agents-on-cloud/web.performance.agentsoncloud.com.git"
                           ),
                sshTransfer(
-                        execCommand: "cd /var/www/web.performance.agentsoncloud.com && npm i  && npm run build"
+                        execCommand: "cd /var/www/web.performance.agentsoncloud.com && sudo npm i  && sudo npm run build"
                          ),
                 ])
             ])
