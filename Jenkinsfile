@@ -8,7 +8,7 @@ pipeline {
             steps {
             echo("I am in build")
             sshPublisher(
-            continueOnError: false, failOnError: true,
+            continueOnError: true,
             publishers: [
                 sshPublisherDesc(
                 configName: "dev server",
