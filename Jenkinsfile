@@ -43,7 +43,7 @@ pipeline {
                 verbose: true,
                 transfers: [
                sshTransfer(
-                        execCommand: "cd /var/www/web.performance.agentsoncloud.com && pm2 restart"
+                        execCommand: "cd /var/www/web.performance.agentsoncloud.com && pm2 start"
                          ),
                 ])
             ])
